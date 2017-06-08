@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/arMainLayout"
+                    android:tag="arMainLayout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+    <!--<ImageView-->
+        <!--android:layout_width="30dp"-->
+        <!--android:layout_height="30dp"-->
+        <!--android:src="@drawable/icon_caution"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:id="@+id/tombol_caution"-->
+        <!--android:background="@color/black_transparent"/>-->
+
+    <!--<RelativeLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="94dp"-->
+        <!--android:id="@+id/rl_keterangan_form"-->
+        <!--android:visibility="visible">-->
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="80dp"-->
+            <!--android:background="@color/black_transparent"-->
+            <!--android:orientation="horizontal">-->
+            <!--<LinearLayout-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="0.75"-->
+                <!--android:orientation="vertical">-->
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="Kuesioner"-->
+                    <!--android:layout_gravity="center_horizontal"-->
+                    <!--android:gravity="center_horizontal"-->
+                    <!--android:textColor="@color/white"/>-->
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="Kuesioner Susenas"-->
+                    <!--android:layout_marginTop="20dp"-->
+                    <!--android:textSize="20sp"-->
+                    <!--android:id="@+id/nama_kuesioner"-->
+                    <!--android:layout_gravity="center_horizontal"-->
+                    <!--android:textColor="@color/white"-->
+                    <!--android:singleLine="true"/>-->
+            <!--</LinearLayout>-->
+            <!--<View-->
+                <!--android:layout_width="1dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:background="@color/white"/>-->
+            <!--<LinearLayout-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="0.75"-->
+                <!--android:orientation="vertical">-->
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="Total Isian"-->
+                    <!--android:layout_gravity="center_horizontal"-->
+                    <!--android:gravity="center_horizontal"-->
+                    <!--android:textColor="@color/white"/>-->
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="87"-->
+                    <!--android:layout_marginTop="20dp"-->
+                    <!--android:textSize="23sp"-->
+                    <!--android:id="@+id/total_isian"-->
+                    <!--android:layout_gravity="center_horizontal"-->
+                    <!--android:textColor="@color/white"-->
+                    <!--android:singleLine="true"/>-->
+            <!--</LinearLayout>-->
+        <!--</LinearLayout>-->
+        <!--<ImageView-->
+            <!--android:layout_width="30dp"-->
+            <!--android:layout_height="30dp"-->
+            <!--android:src="@drawable/icon_cancel"-->
+            <!--android:visibility="gone"-->
+            <!--android:id="@+id/tombol_cancel"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_alignParentBottom="true"/>-->
+    <!--</RelativeLayout>-->
+
+
+    <org.odk.collect.android.augmentedreality.arkit.PARCameraView
+        android:id="@+id/arCameraView"
+        android:tag="arCameraView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
+
+    <org.odk.collect.android.augmentedreality.arkit.PARView
+        android:id="@+id/arContentView"
+        android:tag="arContentView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <org.odk.collect.android.augmentedreality.arkit.PARRadarView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:background="@drawable/radar_screen"
+        android:id="@+id/arRadarView"
+        android:tag="arRadarView"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true" />
+
+    <com.nightonke.boommenu.BoomMenuButton
+        android:id="@+id/bmb_scan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+</RelativeLayout>

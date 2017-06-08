@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_ham_button"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="16dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".augmentedreality.ui.MainMenuApp">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/keterangan_profil"
+            android:orientation="vertical"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:src="@drawable/foto_profil"
+                android:id="@+id/foto_profil"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Septiawan Aji Pradana"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:textSize="20sp"
+                android:id="@+id/nama_profil"
+                android:layout_below="@id/foto_profil"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="40dp"/>
+
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="Daftar Kuesioner"/>-->
+            <!--<android.support.v7.widget.RecyclerView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:id="@+id/list_form_main"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:layout_below="@id/nama_profil"></android.support.v7.widget.RecyclerView>-->
+            <org.odk.collect.android.augmentedreality.ui.ExpandGridView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/grid_view"
+                android:numColumns="auto_fit"
+                android:gravity="center"
+                android:nestedScrollingEnabled="true"
+                android:layout_margin="3dp"
+                android:horizontalSpacing="3dp"
+                android:verticalSpacing="3dp"></org.odk.collect.android.augmentedreality.ui.ExpandGridView>
+        </LinearLayout>
+    </ScrollView>
+
+
+    <com.nightonke.boommenu.BoomMenuButton
+        android:id="@+id/bmb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        app:bmb_normalColor="@android:color/white"
+        app:bmb_highlightedColor="@android:color/darker_gray" />
+
+</RelativeLayout>
