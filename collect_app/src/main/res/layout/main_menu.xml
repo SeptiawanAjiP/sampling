@@ -120,6 +120,19 @@
                 android:layout_height="wrap_content"
                 android:padding="20dp"
                 android:textSize="21sp" />
+
+            <View
+                android:id="@+id/sampling_spacer"
+                android:layout_width="match_parent"
+                android:layout_height="5dp" />
+
+            <Button
+                android:id="@+id/sampling"
+                android:text="Sampling"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:textSize="21sp" />
         </LinearLayout>
     </ScrollView>
 

@@ -2,6 +2,7 @@ package org.odk.collect.android.gede;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -20,12 +21,15 @@ import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.InstanceChooserList;
+import org.odk.collect.android.activities.ListHasilSampling;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.augmentedreality.MainActivity;
 import org.odk.collect.android.augmentedreality.aksesdata.AksesDataOdk;
 import org.odk.collect.android.downloadinstance.Download;
 import org.odk.collect.android.downloadinstance.DownloadInstances;
 import org.odk.collect.android.downloadinstance.listener.DownloadPcl;
+import org.odk.collect.android.utilities.ApplicationConstants;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -38,8 +42,8 @@ import java.util.Map;
 
 public class GetUuidHasilSample extends AppCompatActivity implements View.OnClickListener,DownloadPcl {
     private EditText alamatServerEt,varIdEt;
-    private Button getFormId,getUUID;
-    private TextView formIdTv,hasilUUIDtv;
+    private Button getFormId;
+    private TextView formIdTv,hasilUUIDtv,tarikSampel,hasilSample;
     private String formId,varId,alamatSer;
     private static final Object bb= new Object();
 
@@ -55,16 +59,18 @@ public class GetUuidHasilSample extends AppCompatActivity implements View.OnClic
         alamatServerEt = (EditText)findViewById(R.id.alamart_server);
         varIdEt = (EditText)findViewById(R.id.var_id);
         getFormId = (Button)findViewById(R.id.button_form_id);
-        getUUID = (Button)findViewById(R.id.btn_get_uuid);
+        tarikSampel= (TextView) findViewById(R.id.tv_tarik_sampel);
         formIdTv = (TextView)findViewById(R.id.tv_form_id);
         hasilUUIDtv= (TextView)findViewById(R.id.hasil_uuid);
+        hasilSample = (TextView)findViewById(R.id.hasil_sampling);
 
         aksesDataOdk = new AksesDataOdk();
         formId = "";
         uuids = new ArrayList<>();
 
         getFormId.setOnClickListener(this);
-        getUUID.setOnClickListener(this);
+        tarikSampel.setOnClickListener(this);
+        hasilSample.setOnClickListener(this);
     }
 
     public void getDataFromServer(final String alamat, final String var_id, final String form_id){
@@ -88,6 +94,8 @@ public class GetUuidHasilSample extends AppCompatActivity implements View.OnClic
                     }
                     hasilUUIDtv.setVisibility(View.VISIBLE);
                     hasilUUIDtv.setText(uuids.toString());
+                    hasilSample.setVisibility(View.VISIBLE);
+                    tarikSampel.setVisibility(View.GONE);
                 }catch (Exception e){
                     Log.d("error_json",e.toString());
                 }
@@ -115,7 +123,8 @@ public class GetUuidHasilSample extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
         if(v==getFormId){
             pilihForm();
-        }else if(v==getUUID){
+        }else if(v==tarikSampel){
+            Toast.makeText(this, "Tarikk", Toast.LENGTH_SHORT).show();
             if(formId.equals("")){
                 Toast.makeText(this, "Pilih Form Dulu", Toast.LENGTH_SHORT).show();
             }else{
@@ -123,6 +132,11 @@ public class GetUuidHasilSample extends AppCompatActivity implements View.OnClic
                 alamatSer = alamatServerEt.getText().toString();
                 getDataFromServer(alamatSer,varId,formId);
             }
+        }else if(v==hasilSample){
+            Intent i = new Intent(getApplicationContext(), ListHasilSampling.class);
+            i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
+                    ApplicationConstants.FormModes.EDIT_SAVED);
+            startActivity(i);
         }
     }
 

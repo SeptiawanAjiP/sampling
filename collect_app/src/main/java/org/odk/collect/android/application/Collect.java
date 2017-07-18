@@ -83,6 +83,8 @@ public class Collect extends PARApplication {
     public static final String SETTINGS = ODK_ROOT + File.separator + "settings";
     private static Collect singleton = null;
 
+    public static final String SAMPEL = ODK_ROOT+ File.separator+ "sampel";
+
     static {
         PRNGFixes.apply();
     }
@@ -123,7 +125,7 @@ public class Collect extends PARApplication {
         }
 
         String[] dirs = {
-                ODK_ROOT, FORMS_PATH, INSTANCES_PATH, CACHE_PATH, METADATA_PATH, OFFLINE_LAYERS
+                ODK_ROOT, FORMS_PATH, INSTANCES_PATH, SAMPEL, CACHE_PATH, METADATA_PATH, OFFLINE_LAYERS
         };
 
         for (String dirName : dirs) {

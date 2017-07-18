@@ -548,7 +548,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
     }
 
     public void sendData(final HashMap<String,String> parameter){
-        StringRequest send = new StringRequest(Request.Method.POST, AlamatServer.ALAMAT_SERVER+AlamatServer.INSERT, new Response.Listener<String>() {
+        StringRequest send = new StringRequest(Request.Method.POST, AlamatServer.getAlamatServer() + AlamatServer.getINSERT(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try{

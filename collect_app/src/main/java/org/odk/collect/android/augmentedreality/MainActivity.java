@@ -187,7 +187,7 @@ public class MainActivity extends Activity implements View.OnClickListener,Downl
     }
 
     public void downloadInstancesFromServer(){
-        StringRequest downloadFromServer = new StringRequest(Request.Method.GET, AlamatServer.ALAMAT_SERVER + AlamatServer.GET, new Response.Listener<String>() {
+        StringRequest downloadFromServer = new StringRequest(Request.Method.GET, AlamatServer.getAlamatServer() + AlamatServer.getGET(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try{

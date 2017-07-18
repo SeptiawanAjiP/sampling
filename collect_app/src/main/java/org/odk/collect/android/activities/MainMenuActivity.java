@@ -17,17 +17,21 @@ package org.odk.collect.android.activities;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.ContentObserver;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,20 +45,28 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.analytics.GoogleAnalytics;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.augmentedreality.MainActivity;
-import org.odk.collect.android.augmentedreality.landingpage.LandingPageActivity;
-import org.odk.collect.android.augmentedreality.ui.MainMenuApp;
+import org.odk.collect.android.augmentedreality.SessionManager;
+import org.odk.collect.android.augmentedreality.aksesdata.AksesDataOdk;
+import org.odk.collect.android.augmentedreality.aksesdata.Form;
+import org.odk.collect.android.augmentedreality.koneksi.AlamatServer;
 import org.odk.collect.android.dao.InstancesDao;
-import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.downloadinstance.Download;
-import org.odk.collect.android.downloadinstance.Notifikasi;
 import org.odk.collect.android.downloadinstance.DownloadInstances;
 import org.odk.collect.android.downloadinstance.listener.DownloadPcl;
-import org.odk.collect.android.gede.GetUuidHasilSample;
+import org.odk.collect.android.gede.AlamatSession;
+import org.odk.collect.android.gede.BlokSensusActivity;
+import org.odk.collect.android.gede.DialogAlamat;
 import org.odk.collect.android.preferences.AboutPreferencesActivity;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.AdminKeys;
@@ -70,6 +82,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -99,6 +113,7 @@ public class MainMenuActivity extends Activity implements DownloadPcl {
     private Button mViewSentFormsButton;
     private Button mReviewDataButton;
     private Button mGetFormsButton;
+    private Button samplingButton;
     private View mReviewSpacer;
     private View mGetFormsSpacer;
     private AlertDialog mAlertDialog;
@@ -113,6 +128,9 @@ public class MainMenuActivity extends Activity implements DownloadPcl {
     private MyContentObserver mContentObserver = new MyContentObserver();
 
     private static final Object bb= new Object();
+    private AksesDataOdk aksesDataOdk;
+    private ProgressDialog progressDialog;
+    private int def;
 
     // private static boolean DO_NOT_EXIT = false;
 
@@ -135,6 +153,8 @@ public class MainMenuActivity extends Activity implements DownloadPcl {
 
             }
         });
+
+        aksesDataOdk = new AksesDataOdk();
 
         // review data button. expects a result.
         mReviewDataButton = (Button) findViewById(R.id.review_data);
@@ -221,6 +241,14 @@ public class MainMenuActivity extends Activity implements DownloadPcl {
                 Intent i = new Intent(getApplicationContext(),
                         FileManagerTabs.class);
                 startActivity(i);
+            }
+        });
+
+        samplingButton = (Button)findViewById(R.id.sampling);
+        samplingButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cekForm();
             }
         });
 
@@ -401,10 +429,6 @@ public class MainMenuActivity extends Activity implements DownloadPcl {
         if(mboolean){
             Toast.makeText(this, "File Download Completed", Toast.LENGTH_SHORT)
                     .show();
-//            ItemsetDbAdapter dbas = new ItemsetDbAdapter();
-//            dbas.open();
-//            dbas.updatedown(mnotif);
-//            dbas.close();
         }else{
             Toast.makeText(this,"File Download not Completed", Toast.LENGTH_SHORT)
                     .show();
@@ -489,8 +513,9 @@ public class MainMenuActivity extends Activity implements DownloadPcl {
                 }
                 return true;
             case MENU_AR :
-                Intent intent = new Intent(getApplicationContext(),GetUuidHasilSample.class);
-                startActivity(intent);
+                DialogAlamat dialogAlamat = new DialogAlamat(MainMenuActivity.this);
+                dialogAlamat.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialogAlamat.show();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -748,6 +773,98 @@ public class MainMenuActivity extends Activity implements DownloadPcl {
             super.onChange(selfChange);
             mHandler.sendEmptyMessage(0);
         }
+    }
+
+    private void showProgress() {
+        progressDialog = null;// Initialize to null
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading...");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCancelable(true);
+        progressDialog.show();
+    }
+
+    private void cekForm(){
+        AlamatSession alamatSession = new AlamatSession(getApplicationContext());
+        Log.d("__alamat",alamatSession.toString());
+        final ArrayList<Form> formHasil = new ArrayList<>();
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, alamatSession.getAlamat().toString(), new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                ArrayList<Form> forms = aksesDataOdk.getKeteranganForm();
+                Log.d("_gede",response);
+                try{
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray jsonArray = jsonObject.getJSONArray("respon");
+                    for(int i=0;i<jsonArray.length();i++){
+                        String idForm="";
+                        JSONObject j = jsonArray.getJSONObject(i);
+                        idForm = j.getString("form_id");
+                        for(int k=0;k<forms.size();k++){
+                            if(idForm.equals(forms.get(k).getIdForm())){
+                                formHasil.add(forms.get(k));
+                            }
+                        }
+
+                    }
+                    Log.d("__formHasil",formHasil.toString());
+                    if(formHasil.size()==0){
+                        Toast.makeText(MainMenuActivity.this, "Tidak ada form yang siap disampling", Toast.LENGTH_SHORT).show();
+                    }else{
+                        pilihForm(formHasil);
+                    }
+                }catch (Exception e){
+
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> map = new HashMap<>();
+                map.put("type","getFormId");
+                return map;
+            }
+        };
+        Collect.getInstance2().addToRequestQueue(stringRequest);
+    }
+
+    public void pilihForm(ArrayList<Form> hasil){
+        final String[] pilihan = new String[hasil.size()];
+        for (int i=0;i<hasil.size();i++){
+            pilihan[i] = hasil.get(i).getDisplayName();
+        }
+
+        def = 0;
+
+        AlertDialog dialog = new AlertDialog.Builder(MainMenuActivity.this)
+                .setTitle("Daftar Kuesioner Siap Sampling")
+                .setSingleChoiceItems(pilihan, 0,  new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        def = which;
+                    }
+                })
+                .setPositiveButton("Pilih", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(getApplicationContext(), BlokSensusActivity.class);
+                        intent.putExtra("form_id",pilihan[def]);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("Batal", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).create();
+        dialog.show();
+        dialog.setCancelable(false);
     }
 
 }
