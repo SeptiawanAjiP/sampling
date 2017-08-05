@@ -283,8 +283,6 @@ the specific language governing permissions and limitations under the License.
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
         <activity android:name=".augmentedreality.ui.MainMenuApp"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
-        <activity android:name=".gede.GetUuidHasilSample"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
 
         <activity android:name=".augmentedreality.jajal.JajalActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
@@ -292,6 +290,9 @@ the specific language governing permissions and limitations under the License.
             android:label="Hasil Sampel"/>
         <activity android:name=".gede.BlokSensusActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
+        <activity android:name=".gede.HalamanUtamaAplikasi"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:screenOrientation="portrait"/>
 
         <service
             android:name=".augmentedreality.formisian.FetchAddressIntentService"

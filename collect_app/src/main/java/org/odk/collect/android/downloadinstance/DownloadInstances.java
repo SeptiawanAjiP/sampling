@@ -58,7 +58,7 @@ public class  DownloadInstances {
             Log.d("MainActivity", "formxml " + Ex);
         }
         try {
-            dir = new File(Collect.SAMPEL);
+            dir = new File(Collect.INSTANCES_PATH);
         } catch (Exception ex) {
             Log.d("MainActivity", "dir path" + ex);
         }
@@ -72,7 +72,7 @@ public class  DownloadInstances {
         } catch (Exception ex) {
             Log.d("MainActivity", "form stat" + ex);
         }
-        ParamsGet as = new ParamsGet(dir, lfd, fs, download.getUuid(), Collect.SAMPEL, serverinfo);
+        ParamsGet as = new ParamsGet(dir, lfd, fs, download.getUuid(), Collect.INSTANCES_PATH, serverinfo);
         GetXml get = new GetXml(mcontext);
         get.setDownloadpcl(mdownloadpcl, download);
         get.doInBackground(as);

@@ -24,10 +24,8 @@ public class SessionManager {
     }
 
     public String getAlamat(){
-        String install = sharedPreferences.getString("install",null);
+        String install = sharedPreferences.getString("alamat",null);
         return  install;
     }
-
-
 
 }

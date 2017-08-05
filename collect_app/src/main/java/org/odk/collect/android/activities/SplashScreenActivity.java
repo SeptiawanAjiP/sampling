@@ -37,7 +37,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.augmentedreality.MainActivity;
 import org.odk.collect.android.augmentedreality.jajal.JajalActivity;
-import org.odk.collect.android.gede.GetUuidHasilSample;
+import org.odk.collect.android.gede.HalamanUtamaAplikasi;
 import org.odk.collect.android.preferences.PreferenceKeys;
 
 import java.io.File;
@@ -119,7 +119,7 @@ public class SplashScreenActivity extends Activity {
     private void endSplashScreen() {
 
         // launch new activity and close splash screen
-        startActivity(new Intent(SplashScreenActivity.this, MainMenuActivity.class));
+        startActivity(new Intent(SplashScreenActivity.this, HalamanUtamaAplikasi.class));
 //        startActivity(new Intent(SplashScreenActivity.this, JajalActivity.class));
         finish();
     }

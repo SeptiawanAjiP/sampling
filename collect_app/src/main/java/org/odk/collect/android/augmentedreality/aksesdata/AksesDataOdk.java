@@ -71,7 +71,7 @@ public class AksesDataOdk {
         try{
             String sortOrder = InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH + " ASC ";
 //            cursor = Collect.getInstance().getContentResolver().query(InstanceProviderAPI.InstanceColumns.CONTENT_URI,null,null,null,sortOrder);
-            cursor = instancesDao.getFinalizedInstancesCursor();
+            cursor = instancesDao.getUnsentInstancesCursor();
             if(cursor==null){
                 Log.d("instances_final","null");
             }

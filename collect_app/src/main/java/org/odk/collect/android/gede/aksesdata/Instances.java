@@ -1,4 +1,4 @@
-package org.odk.collect.android.augmentedreality.aksesdata;
+package org.odk.collect.android.gede.aksesdata;
 
 import android.net.Uri;
 
@@ -44,6 +44,7 @@ public class Instances {
     public void setFormId(String formId) {
         this.formId = formId;
     }
+
 
     public Uri getUri() {
         return uri;

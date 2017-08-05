@@ -45,7 +45,6 @@ public class BlokSensusActivity extends AppCompatActivity{
         orderList();
     }
 
-
     public void orderList(){
         ArrayList<String> bs = new ArrayList<>();
         bs.add("5201003");
@@ -57,7 +56,5 @@ public class BlokSensusActivity extends AppCompatActivity{
         rcy.setItemAnimator(new DefaultItemAnimator());
         rcy.setAdapter(blokSensusAdapter);
     }
-
-
 }
 
