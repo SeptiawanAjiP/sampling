@@ -127,12 +127,12 @@ public class AksesDataOdk {
     }
 
     public Instances getInstanceByUUID(String uuid){
-        Log.d("__jerman","masuk");
+        Log.d("__jerman",uuid);
         Instances instances = new Instances();
         InstancesDao instancesDao = new InstancesDao();
         Cursor cursor = null;
         try{
-            cursor = instancesDao.getFinalizedInstancesCursor();
+            cursor = instancesDao.getAllCompletedUndeletedInstancesCursor();
             if(cursor==null){
                 Log.d("instances_final","null");
             }
@@ -152,12 +152,13 @@ public class AksesDataOdk {
                 }
             }
         }catch (Exception e){
-
+            Log.d("_cuk_uuid",e.toString());
         }
 
         //yo
         return instances;
     }
+
 
     public String getIdFrombyUri(Uri uri){
         Log.d("__sabtu",uri.toString());

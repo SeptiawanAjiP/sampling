@@ -15,6 +15,7 @@ import android.support.v7.graphics.drawable.DrawableWrapper;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -33,9 +34,11 @@ import org.odk.collect.android.augmentedreality.DatabaseHandler;
 import org.odk.collect.android.augmentedreality.aksesdata.AksesDataOdk;
 import org.odk.collect.android.augmentedreality.aksesdata.Form;
 import org.odk.collect.android.augmentedreality.aksesdata.Instances;
+import org.odk.collect.android.augmentedreality.aksesdata.ParsingForm;
 import org.odk.collect.android.downloadinstance.Download;
 import org.odk.collect.android.downloadinstance.DownloadInstances;
 import org.odk.collect.android.downloadinstance.listener.DownloadPcl;
+import org.odk.collect.android.gede.listsampel.SampelActivity;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -55,11 +58,15 @@ public class HalamanUtamaAplikasi extends AppCompatActivity implements DownloadP
     private AksesDataOdk aksesDataOdk;
     private SessionManager sessionManager;
     int set;
+    private ParsingForm parsingForm;
     int def;
+    String pilihan;
     ArrayList<String> uuids;
     private static final Object bb= new Object();
     private InstanceSyncTask instanceSyncTask;
     private ProgressDialog progressDialog;
+
+    private HashMap<String,String> keyForParse;
     private org.odk.collect.android.gede.databasehandler.DatabaseHandler databaseHandler;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,7 +77,10 @@ public class HalamanUtamaAplikasi extends AppCompatActivity implements DownloadP
         settingLl = (LinearLayout)findViewById(R.id.ll_setting);
 
         aksesDataOdk = new AksesDataOdk();
+        parsingForm = new ParsingForm();
+        keyForParse = new HashMap<>();
         databaseHandler = new org.odk.collect.android.gede.databasehandler.DatabaseHandler(getApplicationContext());
+//        dummyData();
         uuids = new ArrayList<>();
         sessionManager = new SessionManager(getApplicationContext());
         if(sessionManager.getAlamat()==null){
@@ -230,7 +240,7 @@ public class HalamanUtamaAplikasi extends AppCompatActivity implements DownloadP
                         uuids.add(array.getString(i));
                     }
                     Toast.makeText(HalamanUtamaAplikasi.this, "Berhasil Tarik Sampel", Toast.LENGTH_SHORT).show();
-//                    Toast.makeText(HalamanUtamaAplikasi.this, uuids.toString(), Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
                 }catch (Exception e){
                     Log.d("error_json",e.toString());
                 }
@@ -294,10 +304,11 @@ public class HalamanUtamaAplikasi extends AppCompatActivity implements DownloadP
                 .setPositiveButton("Pilih", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
-                        i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
-                        ApplicationConstants.FormModes.EDIT_SAVED);
-                        startActivity(i);
+//                        Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
+//                        i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
+//                                ApplicationConstants.FormModes.EDIT_SAVED);
+//                        startActivity(i);
+                        cekId(pilihan[def]);
                     }
                 })
                 .setNegativeButton("Batal", new DialogInterface.OnClickListener() {
@@ -309,6 +320,90 @@ public class HalamanUtamaAplikasi extends AppCompatActivity implements DownloadP
         dialog.show();
         dialog.setCancelable(false);
     }
+
+    public void cekId(final String idForm){
+
+        final String[] pilihan = new String[databaseHandler.getId(idForm).size()];
+        for (int i=0;i<databaseHandler.getId(idForm).size();i++){
+            pilihan[i] = databaseHandler.getId(idForm).get(i);
+        }
+
+        def = 0;
+
+        AlertDialog dialog = new AlertDialog.Builder(HalamanUtamaAplikasi.this)
+                .setTitle("Pilih Wilayah")
+                .setSingleChoiceItems(pilihan, 0,  new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        def = which;
+                    }
+                })
+                .setPositiveButton("Pilih", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+//                        Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
+//                        i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
+//                                ApplicationConstants.FormModes.EDIT_SAVED);
+//                        startActivity(i);
+                        getKeyForm(idForm,pilihan[def]);
+                    }
+                })
+                .setNegativeButton("Batal", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).create();
+        dialog.show();
+        dialog.setCancelable(false);
+    }
+
+    public void getKeyForm (final String idForm,final String id){
+        ArrayList<String> keyPertama = new ArrayList<>();
+        for(int i=0;i<parsingForm.getVariabelForm(aksesDataOdk.getKeteranganFormbyId(idForm)).size();i++){
+            if(!parsingForm.getVariabelForm(aksesDataOdk.getKeteranganFormbyId(idForm)).get(i).equals(ParsingForm.LOKASI) && !parsingForm.getVariabelForm(aksesDataOdk.getKeteranganFormbyId(idForm)).get(i).equals(ParsingForm.FOTO_BANGUNAN)){
+                keyPertama.add(parsingForm.getVariabelForm(aksesDataOdk.getKeteranganFormbyId(idForm)).get(i));
+            }
+        }
+        final String[] variabel = new String[keyPertama.size()];
+        for (int i=0;i<keyPertama.size();i++) {
+            variabel[i] = keyPertama.get(i);
+        }
+
+        def = 0;
+        AlertDialog dialog = new AlertDialog.Builder(HalamanUtamaAplikasi.this)
+                .setTitle("Atur Variabel")
+
+                .setSingleChoiceItems(variabel, 0,  new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        def = which;
+                    }
+                })
+                .setPositiveButton("Pilih", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        pilihan = variabel[def];
+                        Intent intent = new Intent(HalamanUtamaAplikasi.this, SampelActivity.class);
+                        intent.putExtra("idForm",idForm);
+                        intent.putExtra("id",id);
+                        intent.putExtra("key",pilihan);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("Batal", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).create();
+        dialog.show();
+        Log.d("wulan_key",keyPertama.toString());
+    }
+
+
+
+
 
     @Override
     public void syncComplete(String result) {
@@ -400,6 +495,13 @@ public class HalamanUtamaAplikasi extends AppCompatActivity implements DownloadP
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setCancelable(true);
         progressDialog.show();
+    }
+
+    public void dummyData(){
+        databaseHandler.insertTabelSampel("build_odk_form","uuid:989dfh20hdfi","asu_1");
+        databaseHandler.insertTabelSampel("build_listing","uuid:989dfh20tetui","koko_1");
+        databaseHandler.insertTabelSampel("build_odk_form","uuid:989dfiuouioi","dbm_1");
+        databaseHandler.insertTabelSampel("build_listing","uuid:989dfhvbxvxvb","cece_1");
     }
 
 }

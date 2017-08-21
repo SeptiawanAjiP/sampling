@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="120dp"
+    android:layout_height="80dp"
     >
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -34,77 +34,26 @@
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     android:padding="4dp"
-                    android:id="@+id/var_1"/>
+                    android:id="@+id/nomor"/>
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/rl_gambar"
                 android:layout_marginLeft="10dp"
+                android:layout_centerVertical="true"
                 android:id="@+id/rl_judul_meetup">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
                     android:text="Septiawan Aji P"
-                    android:textSize="17dp"
-                    android:id="@+id/var_2"
+                    android:textSize="20dp"
+                    android:id="@+id/keterangan"
                     android:textColor="#000"
                     android:layout_marginLeft="10dp"/>
             </RelativeLayout>
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/rl_gambar"
-                android:layout_marginLeft="10dp"
-                android:layout_below="@id/rl_judul_meetup"
-                android:id="@+id/rl_tanggal_meetup"
-                android:layout_marginTop="5dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:id="@+id/var_3"
-                    android:text="Jam Pesan : 15.00"
-                    android:textSize="12dp"
-                    android:textColor="#000"
-                    android:layout_marginLeft="10dp"/>
-            </RelativeLayout>
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/rl_gambar"
-                android:layout_marginLeft="10dp"
-                android:layout_below="@id/rl_tanggal_meetup"
-                android:id="@+id/rl_tempat_meetup"
-                android:layout_marginTop="5dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="081215749494"
-                    android:textSize="12dp"
-                    android:id="@+id/var_4"
-                    android:textColor="#000"
-                    android:layout_marginLeft="10dp"/>
 
-            </RelativeLayout>
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/rl_gambar"
-                android:layout_marginLeft="10dp"
-                android:layout_below="@id/rl_tempat_meetup"
-                android:id="@+id/rl_konfirmasi"
-                android:layout_marginTop="5dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Belum dikonfirmasi"
-                    android:textSize="12dp"
-                    android:id="@+id/var_5"
-                    android:textColor="#bf0c0c"
-                    android:layout_marginLeft="10dp"/>
-            </RelativeLayout>
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </RelativeLayout>

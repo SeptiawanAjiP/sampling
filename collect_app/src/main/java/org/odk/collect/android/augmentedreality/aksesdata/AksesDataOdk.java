@@ -1,5 +1,6 @@
 package org.odk.collect.android.augmentedreality.aksesdata;
 
+import android.content.ContentUris;
 import android.database.Cursor;
 import android.util.Log;
 
@@ -124,5 +125,42 @@ public class AksesDataOdk {
         File theFile = new File(dir);
         String parent = theFile.getParent();
         return parent;
+    }
+
+    public Instances getInstanceByUUID(String uuid){
+        Log.d("__jerman",uuid);
+        Instances instances = new Instances();
+        InstancesDao instancesDao = new InstancesDao();
+        Cursor cursor = null;
+        try{
+            cursor = instancesDao.getAllCompletedUndeletedInstancesCursor();
+            if(cursor==null){
+                Log.d("instances_final","null");
+            }
+            cursor.moveToPosition(-1);
+
+            while(cursor.moveToNext()){
+                Log.d("__jerman1","masuk");
+                Instances instances1 = new Instances();
+                instances1.setPathInstances(cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH)));
+                instances1.setUuid(cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.UUID)));
+                instances1.setFormId(cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_FORM_ID)));
+                instances1.setUri(ContentUris.withAppendedId(InstanceProviderAPI.InstanceColumns.CONTENT_URI,
+                        cursor.getLong(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID))));
+                Log.d("_makdim_path",instances1.getPathInstances());
+                Log.d("_makdim_uuid",instances1.getUuid());
+                Log.d("_makdim_form",instances1.getFormId());
+                Log.d("_makdim_uri",instances1.getUri().toString());
+                if(instances1.getUuid().equals(uuid)){
+                    Log.d("__jerman2","masuk");
+                    instances = instances1;
+                }
+            }
+        }catch (Exception e){
+            Log.d("_cuk_uuid",e.toString());
+        }
+
+        //yo
+        return instances;
     }
 }

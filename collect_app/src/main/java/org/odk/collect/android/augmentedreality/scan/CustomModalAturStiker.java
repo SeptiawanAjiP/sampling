@@ -114,7 +114,6 @@ public class CustomModalAturStiker extends Dialog{
                 }
             }
         });
-
         getKeyForm();
     }
 

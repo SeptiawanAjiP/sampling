@@ -66,7 +66,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void insertTabelSampel(String idForm,String uuid,String id){
         SQLiteDatabase db = this.getWritableDatabase();
         Log.d("_gede",idForm+","+uuid);
-        if(cekRow(idForm).equals("ada")){
+        Log.d("_gede_cek__",cekRow(uuid));
+        if(cekRow(uuid).equals("ada")){
 
         }else{
             try{
@@ -85,39 +86,71 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public ArrayList<String> getForm(){
         ArrayList<String> forms = new ArrayList<>();
         SQLiteDatabase sql = this.getReadableDatabase();
-        String query = "SELECT "+FORM_ID+" FROM "+TABLE_SAMPEL;
+        String query = "SELECT DISTINCT "+FORM_ID+" FROM "+TABLE_SAMPEL;
         Cursor c= sql.rawQuery(query,null);
 
+
         if(c.moveToFirst()){
-            String uuid = c.getString(c.getColumnIndex(FORM_ID));
-            forms.add(uuid);
+            do{
+                String uuid = c.getString(c.getColumnIndex(FORM_ID));
+                forms.add(uuid);
+            }while (c.moveToNext());
         }else{
             Log.d("getGps","not move to first");
             return forms;
         }
         Log.d("aji___has",forms.toString());
+
+
         return forms;
+    }
+
+    public ArrayList<String> getId(String idForm){
+        ArrayList<String> ids = new ArrayList<>();
+        SQLiteDatabase sql = this.getReadableDatabase();
+        String query = "SELECT DISTINCT "+ID+" FROM "+TABLE_SAMPEL+" WHERE "+FORM_ID+"='"+idForm+"'";
+        Cursor c= sql.rawQuery(query,null);
+
+
+        if(c.moveToFirst()){
+            do{
+                String uuid = c.getString(c.getColumnIndex(ID));
+                ids.add(uuid);
+            }while (c.moveToNext());
+        }else{
+            Log.d("getGps","not move to first");
+            return ids;
+        }
+        Log.d("aji___has",ids.toString());
+
+
+        return ids;
     }
 
     public ArrayList<String> getAllByIdAndFormId(String idForm,String id){
         ArrayList<String> arrayList = new ArrayList<>();
         SQLiteDatabase sql = this.getReadableDatabase();
-        String query = "SELECT "+UUID+" FROM "+TABLE_SAMPEL+" WHERE "+FORM_ID+"='"+idForm+"' AND "+ID+"='"+ID+"'";
+        String query = "SELECT "+UUID+" FROM "+TABLE_SAMPEL+" WHERE "+FORM_ID+"='"+idForm+"' AND "+ID+"='"+id+"'";
         Cursor c= sql.rawQuery(query,null);
-
         if(c.moveToFirst()){
-            String uuid = c.getString(c.getColumnIndex(UUID));
-            arrayList.add(uuid);
+            do{
+                String uuid = c.getString(c.getColumnIndex(UUID));
+                arrayList.add(uuid);
+            }while (c.moveToNext());
+
         }else{
             Log.d("getGps","not move to first");
             return arrayList;
         }
         Log.d("aji___has",arrayList.toString());
+
+
         return arrayList ;
     }
 
     public String cekRow(String uuid){
         String cek="";
+        Log.d("minggu_",uuid);
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c  = db.rawQuery("SELECT " + ID_AUTO + " FROM " + TABLE_SAMPEL+" WHERE "+UUID+"='"+uuid+"'" , null);
 
@@ -151,22 +184,25 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase sql = this.getReadableDatabase();
         String query = "SELECT "+TEXT_1+","+TEXT_2+","+TEXT_3+","+TEXT_4+" FROM "+TABLE_PARAMETER+" WHERE "+FORM_ID+"='"+idForm+"'";
         Cursor c= sql.rawQuery(query,null);
-
         if(c.moveToFirst()){
-            String text1 = c.getString(c.getColumnIndex(TEXT_1));
-            String text2 = c.getString(c.getColumnIndex(TEXT_2));
-            String text3 = c.getString(c.getColumnIndex(TEXT_3));
-            String text4 = c.getString(c.getColumnIndex(TEXT_4));
-            parameter.add(text1);
-            parameter.add(text2);
-            parameter.add(text3);
-            parameter.add(text4);
+            do{
+                String text1 = c.getString(c.getColumnIndex(TEXT_1));
+                String text2 = c.getString(c.getColumnIndex(TEXT_2));
+                String text3 = c.getString(c.getColumnIndex(TEXT_3));
+                String text4 = c.getString(c.getColumnIndex(TEXT_4));
+                parameter.add(text1);
+                parameter.add(text2);
+                parameter.add(text3);
+                parameter.add(text4);
+
+            }while (c.moveToNext());
 
         }else{
             Log.d("getGps","not move to first");
             return parameter;
         }
         Log.d("aji___has",parameter.toString());
+
         return parameter;
     }
 }

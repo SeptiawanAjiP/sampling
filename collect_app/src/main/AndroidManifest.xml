@@ -293,6 +293,9 @@ the specific language governing permissions and limitations under the License.
         <activity android:name=".gede.HalamanUtamaAplikasi"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             android:screenOrientation="portrait"/>
+        <activity android:name=".gede.listsampel.SampelActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
 
         <service
             android:name=".augmentedreality.formisian.FetchAddressIntentService"
